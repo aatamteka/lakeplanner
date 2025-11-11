@@ -219,6 +219,100 @@ curl http://localhost:8000/health
 1. Create handler in `app/messaging/handlers.py`
 2. Subscribe in `app/main.py` lifespan function
 
+## RabbitMQ Command Line Testing
+
+### Publishing Audit Events from Command Line
+
+Install RabbitMQ tools:
+```bash
+pip install pika
+```
+
+Publish a sample audit event using Python:
+```bash
+python3 << 'EOF'
+import pika
+import json
+
+connection = pika.BlockingConnection(pika.URLParameters('amqp://admin:admin@localhost:5672/'))
+channel = connection.channel()
+
+user_id = "e2164d9b-389c-48c5-9d3f-05a72301fef7"
+audit_event = {
+    "event_type": "user.created",
+    "user_id": user_id,
+    "entity_type": "user",
+    "entity_id": user_id,
+    "payload": {"username": "hsimpson", "email": "homer@example.com","ip": "10.0.0.1"}
+}
+
+channel.basic_publish(
+    exchange='lake_platform_events',
+    routing_key='audit.user',
+    body=json.dumps(audit_event)
+)
+
+print(f"Published audit event: {audit_event}")
+connection.close()
+EOF
+```
+
+### Consuming Messages from Command Line
+
+Consume messages from the audit queue:
+```bash
+python3 << 'EOF'
+import pika
+
+def callback(ch, method, properties, body):
+    print(f"Received: {body.decode()}")
+
+connection = pika.BlockingConnection(pika.URLParameters('amqp://admin:admin@localhost:5672/'))
+channel = connection.channel()
+
+channel.queue_declare(queue='audit.user')
+channel.basic_consume(queue='audit.user', on_message_callback=callback, auto_ack=True)
+
+print('Waiting for messages. Press CTRL+C to exit.')
+channel.start_consuming()
+EOF
+```
+
+### Sample Audit Event Formats
+
+**User Creation:**
+```json
+{
+  "event_type": "user.created",
+  "user_id": 123,
+  "entity_type": "user",
+  "entity_id": 123,
+  "payload": {"username": "john_doe", "email": "john@example.com"}
+}
+```
+
+**Lake Update:**
+```json
+{
+  "event_type": "lake.updated",
+  "user_id": 456,
+  "entity_type": "lake",
+  "entity_id": 789,
+  "payload": {"name": "Lake Tahoe", "state": "CA"}
+}
+```
+
+**Outing Deleted:**
+```json
+{
+  "event_type": "outing.deleted",
+  "user_id": 123,
+  "entity_type": "outing",
+  "entity_id": 456,
+  "payload": {"lake_id": 789, "date": "2024-07-15"}
+}
+```
+
 ## Troubleshooting
 
 ### Database Connection Issues
