@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgis/postgis:16-3.5-alpine
+    container_name: lake-platform-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-lakeplatform}
+      POSTGRES_USER: ${POSTGRES_USER:-lakeuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lakepass}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lakeuser} -d ${POSTGRES_DB:-lakeplatform}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lake-platform
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: lake-platform-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-admin}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-admin}
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lake-platform
+
+#  prometheus:
+#    image: prom/prometheus:v2.48.0
+#    container_name: lake-platform-prometheus
+#    command:
+#      - '--config.file=/etc/prometheus/prometheus.yml'
+#      - '--storage.tsdb.path=/prometheus'
+#      - '--web.console.libraries=/etc/prometheus/console_libraries'
+#      - '--web.console.templates=/etc/prometheus/consoles'
+#      - '--storage.tsdb.retention.time=30d'
+#      - '--web.enable-lifecycle'
+#    ports:
+#      - "${PROMETHEUS_PORT:-9090}:9090"
+#    volumes:
+#      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+#      - prometheus_data:/prometheus
+#    healthcheck:
+#      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#    networks:
+#      - lake-platform
+
+#  grafana:
+#    image: grafana/grafana:10.2.2
+#    container_name: lake-platform-grafana
+#    environment:
+#      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+#      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+#      GF_USERS_ALLOW_SIGN_UP: "false"
+#      GF_SERVER_ROOT_URL: http://localhost:3000
+#    ports:
+#      - "${GRAFANA_PORT:-3000}:3000"
+#    volumes:
+#      - grafana_data:/var/lib/grafana
+#      - ./grafana/provisioning:/etc/grafana/provisioning
+#    depends_on:
+#      - prometheus
+#    healthcheck:
+#      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#    networks:
+#      - lake-platform
+
+  redis:
+    image: redis:7-alpine
+    container_name: lake-platform-redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lake-platform
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
+  prometheus_data:
+  grafana_data:
+  redis_data:
+
+networks:
+  lake-platform:
+    name: lake-platform
+    driver: bridge
+    external: false

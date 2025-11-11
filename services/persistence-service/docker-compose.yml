@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  persistence-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lake-platform-persistence-service
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lakeuser}:${POSTGRES_PASSWORD:-lakepass}@lake-platform-postgres:5432/${POSTGRES_DB:-lakeplatform}
+      RABBITMQ_URL: amqp://${RABBITMQ_USER:-admin}:${RABBITMQ_PASSWORD:-admin}@lake-platform-rabbitmq:5672/
+      API_HOST: 0.0.0.0
+      API_PORT: 8000
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    ports:
+      - "${API_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - lake-platform
+    restart: unless-stopped
+
+networks:
+  lake-platform:
+    name: lake-platform
+    external: true
