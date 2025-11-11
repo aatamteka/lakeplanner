@@ -3,6 +3,7 @@ version: '3.8'
 services:
   postgres:
     image: postgis/postgis:16-3.5-alpine
+    platform: linux/amd64
     container_name: lake-platform-postgres
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-lakeplatform}
@@ -22,7 +23,8 @@ services:
       - lake-platform
 
   rabbitmq:
-    image: rabbitmq:3.12-management
+    image: rabbitmq:3.13-management
+    platform: linux/amd64
     container_name: lake-platform-rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-admin}
@@ -88,6 +90,7 @@ services:
 
   redis:
     image: redis:7-alpine
+    platform: linux/amd64
     container_name: lake-platform-redis
     ports:
       - "${REDIS_PORT:-6379}:6379"
