@@ -1,0 +1,129 @@
+# generated: 2025-11-11 19:43
+# project: lakeplanner
+# project_key: lakeplanner
+# tracking_system: file-system
+# story_location: "{project-root}/docs/stories"
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic exists in epic file but not contexted
+#   - contexted: Epic tech context created (required before drafting stories)
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - drafted: Story file created in stories folder
+#   - ready-for-dev: Draft approved and story context created
+#   - in-progress: Developer actively working on implementation
+#   - review: Under SM review (via code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - completed: Retrospective has been done
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epics should be 'contexted' before stories can be 'drafted'
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically drafts next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', SM reviews, then Dev moves to 'done'
+
+generated: 2025-11-11 19:43
+project: lakeplanner
+project_key: lakeplanner
+tracking_system: file-system
+story_location: "{project-root}/docs/stories"
+
+development_status:
+  epic-1: backlog
+  1-1-backend-project-setup-and-repository-structure: review
+  1-2-database-infrastructure-setup: backlog
+  1-3-message-bus-infrastructure-setup: backlog
+  1-4-persistence-service-scaffolding: backlog
+  1-5-security-infrastructure-setup: backlog
+  1-6-frontend-project-setup-and-build-system: backlog
+  1-7-frontend-ui-foundation-and-component-library: backlog
+  1-8-deployment-pipeline-setup: backlog
+  1-9-redis-caching-infrastructure-setup: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-user-registration-backend-api: backlog
+  2-2-user-authentication-backend-api: backlog
+  2-3-jwt-authentication-middleware: backlog
+  2-4-user-profile-management-backend-api: backlog
+  2-5-friend-network-backend-apis: backlog
+  2-6-user-registration-frontend-ui: backlog
+  2-7-user-login-frontend-ui: backlog
+  2-8-user-profile-management-frontend-ui: backlog
+  2-9-friend-network-frontend-ui: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-lake-data-model-and-admin-api: backlog
+  3-2-boat-ramp-data-model-and-admin-api: backlog
+  3-3-marina-data-model-and-admin-api: backlog
+  3-4-amenity-data-model-and-admin-api: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-weather-service-scaffolding: backlog
+  4-2-noaa-weather-api-integration: backlog
+  4-3-weather-forecast-storage-and-caching: backlog
+  4-4-weather-api-endpoints: backlog
+  4-5-weather-based-filtering-logic: backlog
+  epic-4-retrospective: optional
+
+  epic-5: backlog
+  5-1-recommendation-service-scaffolding: backlog
+  5-2-friend-availability-matching-logic: backlog
+  5-3-weather-aware-recommendation-filtering: backlog
+  5-4-rental-availability-integration: backlog
+  5-5-amenity-based-recommendation-filtering: backlog
+  5-6-recommendation-ranking-and-display-api: backlog
+  epic-5-retrospective: optional
+
+  epic-6: backlog
+  6-1-outing-data-model-and-creation-api: backlog
+  6-2-outing-sharing-and-friend-invitation: backlog
+  6-3-rsvp-management-api: backlog
+  6-4-outing-management-apis: backlog
+  epic-6-retrospective: optional
+
+  epic-7: backlog
+  7-1-contention-coordination-service-scaffolding: backlog
+  7-2-basic-contention-score-calculation: backlog
+  7-3-contention-aware-recommendation-enhancement: backlog
+  7-4-alternative-amenity-suggestions: backlog
+  7-5-time-shift-suggestions: backlog
+  epic-7-retrospective: optional
+
+  epic-8: backlog
+  8-1-notification-service-scaffolding: backlog
+  8-2-email-notification-integration: backlog
+  8-3-sms-notification-integration: backlog
+  8-4-weather-alert-notifications: backlog
+  8-5-friend-availability-notifications: backlog
+  8-6-outing-notifications: backlog
+  8-7-notification-preferences-management: backlog
+  epic-8-retrospective: optional
+
+  epic-9: backlog
+  9-1-admin-authorization-and-role-management: backlog
+  9-2-admin-lake-management-interface: backlog
+  9-3-admin-amenity-management-interface: backlog
+  9-4-usage-statistics-api: backlog
+  9-5-contention-heatmap-api: backlog
+  9-6-admin-analytics-dashboard-ui: backlog
+  epic-9-retrospective: optional
+
+  epic-10: backlog
+  10-1-dashboard-and-homepage: backlog
+  10-2-interactive-map-component: backlog
+  10-3-recommendation-display-ui: backlog
+  10-4-outing-creation-flow-ui: backlog
+  10-5-outing-management-ui: backlog
+  10-6-responsive-design-and-pwa-enhancements: backlog
+  epic-10-retrospective: optional
+

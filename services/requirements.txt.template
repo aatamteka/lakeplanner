@@ -1,0 +1,30 @@
+# Python Dependencies Template for Microservices
+# Copy this file to your service directory and customize as needed
+
+# FastAPI and ASGI server
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+
+# Database (if using SQLAlchemy)
+sqlalchemy==2.0.25
+alembic==1.13.1
+psycopg2-binary==2.9.9
+
+# Data validation
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Message bus (if using RabbitMQ)
+aio-pika==9.3.1
+
+# Environment management
+python-dotenv==1.0.0
+
+# HTTP client (if needed)
+requests==2.31.0
+
+# Monitoring (optional)
+prometheus-client==0.19.0
+
+# Add service-specific dependencies below
+

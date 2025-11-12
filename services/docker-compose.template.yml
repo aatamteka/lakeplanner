@@ -1,0 +1,48 @@
+# Docker Compose Template for Microservices
+# Copy this file to your service directory as docker-compose.yml and customize
+
+version: '3.8'
+
+services:
+  service-name:  # Replace with your service name
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lake-platform-service-name  # Replace with actual name
+    environment:
+      # Database connection (if needed)
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lakeuser}:${POSTGRES_PASSWORD:-lakepass}@lake-platform-postgres:5432/${POSTGRES_DB:-lakeplatform}
+      
+      # Message bus connection (if needed)
+      RABBITMQ_URL: amqp://${RABBITMQ_USER:-admin}:${RABBITMQ_PASSWORD:-admin}@lake-platform-rabbitmq:5672/
+      
+      # Redis connection (if needed)
+      REDIS_URL: redis://lake-platform-redis:6379/0
+      
+      # Service configuration
+      API_HOST: 0.0.0.0
+      API_PORT: 8000
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      
+      # Add service-specific environment variables here
+    ports:
+      - "${API_PORT:-8000}:8000"  # Adjust port as needed
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - lake-platform
+    restart: unless-stopped
+    # Uncomment if service depends on infrastructure being ready
+    # depends_on:
+    #   - postgres
+    #   - rabbitmq
+
+networks:
+  lake-platform:
+    name: lake-platform
+    external: true  # Network created by infra/docker-compose.yml
+
